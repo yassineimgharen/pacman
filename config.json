@@ -1,0 +1,8 @@
+{
+    "aaa": "bbb",
+    "version": "1.0.0",
+    "settings": {
+        "option1": true,
+        "option2": false
+    }
+}
