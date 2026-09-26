@@ -37,3 +37,39 @@ The maze generator decided:
 can_move takes the current position (x, y) and a direction (dx, dy). First it calculates the target cell by adding dx and dy to the current position. Then it checks if that target cell is inside the grid — if not, return False (can't move outside the maze).
 
 Then it checks the bitmask of the current cell. Each direction has a wall bit — North=1, East=2, South=4, West=8. It uses & to check if that specific bit is set in the cell's number. If the bit is 0 → no wall → you can move → return True. If the bit is not 0 → wall exists → you can't move → return False.
+
+# fps
+FPS = Frames Per Second. How many times the game loop runs per second
+
+# Ghost states
+CHASE → moving toward the player
+FRIGHTENED → moving away from player (after super-pacgum eaten)
+DEAD → eaten, waiting to respawn at its corner
+
+# calculate move relation
+1- find possibel moves
+2- calculate distance using player position and possible move
+3- chose smallest distance
+
+example:
++--+--+--+--+--+
+|  |           |
++  +  +--+--+  +
+|     |     |  |
++--+--+  +  +  +
+|   G |  |    P|
++--+  +--+  +  +
+|              |
++--+--+--+--+--+
+Ghost G at (1,2), player P at (4,2)
+
+From (1,2) valid directions:
+
+North (0,-1) → wall ❌
+East (1,0) → wall ❌
+South (0,1) → open ✅ → (1,3) → distance = (1-4)²+(3-2)² = 9+1 = 10
+West (-1,0) → open ✅ → (0,2) → distance = (0-4)²+(2-2)² = 16+0 = 16
+
+Ghost picks South → smallest distance 10 → moves to (1,3).
+
+From (1,3) next frame → keeps calculating → eventually finds path to player through the corridor
