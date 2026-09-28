@@ -12,6 +12,7 @@ class Ghost:
         self.state = "CHASE"
         self.frightened_timer = 0  # counts down when frightened
         self.dead_timer = 0  # counts down when dead
+        self.frozen = False
 
     def frighten(self, duration: int):
         self.state = "FRIGHTENED"
@@ -41,6 +42,8 @@ class Ghost:
                 self.respawn()
 
     def move(self, maze: Maze, player: Player):
+        if self.frozen:
+            return
         if self.state == "DEAD":
             return
         directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]

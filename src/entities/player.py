@@ -9,6 +9,7 @@ class Player:
         self.score = 0
         self.dx = 0
         self.dy = 0
+        self.invincible = False
 
     def move(self, dx: int, dy: int, maze: Maze) -> None:
         if maze.can_move(self.x, self.y, dx, dy):

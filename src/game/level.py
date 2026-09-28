@@ -46,7 +46,7 @@ class Level:
 
         for ghost in self.ghosts:
             if ghost.x == self.player.x and ghost.y == self.player.y:
-                if ghost.state == "CHASE":
+                if ghost.state == "CHASE" and not self.player.invincible:
                     self.player.lose_life()
                     self.player.respawn(*self.maze.get_center())
                 elif ghost.state == "FRIGHTENED":
