@@ -56,6 +56,18 @@ def load(path: str) -> dict:
             highscore_filename = "highscores.json"
         cfg["highscore_filename"] = highscore_filename
 
+        frightened_duration = data.get("frightened_duration", 8)
+        if not isinstance(frightened_duration, int) or frightened_duration < 1:
+            print("Warning: invalid 'frightened_duration', using default 8")
+            frightened_duration = 8
+        cfg["frightened_duration"] = frightened_duration
+
+        ghost_respawn_delay = data.get("ghost_respawn_delay", 5)
+        if not isinstance(ghost_respawn_delay, int) or ghost_respawn_delay < 1:
+            print("Warning: invalid 'ghost_respawn_delay', using default 5")
+            ghost_respawn_delay = 5
+        cfg["ghost_respawn_delay"] = ghost_respawn_delay
+
         # validate levels
         levels = data.get("levels", [])
         if not isinstance(levels, list) or not all(isinstance(level, dict) for level in levels):

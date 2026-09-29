@@ -42,13 +42,15 @@ class Level:
         self.timer -= dt
 
         for ghost in self.ghosts:
-            ghost.move(self.maze, self.player)
+            ghost.move(self.maze, self.player, dt)
 
         for ghost in self.ghosts:
             if ghost.x == self.player.x and ghost.y == self.player.y:
                 if ghost.state == "CHASE" and not self.player.invincible:
                     self.player.lose_life()
                     self.player.respawn(*self.maze.get_center())
+                    for g in self.ghosts:
+                        g.respawn()
                 elif ghost.state == "FRIGHTENED":
                     ghost.die(self.cnfg["ghost_respawn_delay"])
                     self.player.add_score(self.cnfg["points_per_ghost"])

@@ -5,7 +5,11 @@ import re
 def load_score(path: str) -> list:
     try:
         with open(path, "r", encoding="utf-8") as file:
-            content = json.loads(file.read())
+            raw = file.read()
+        # empty file
+        if not raw.strip():
+            return []
+        content = json.loads(raw)
         # ila makantch content list
         if not isinstance(content, list):
             print(f"Warning: invalid format in {path}, resetting scores.")

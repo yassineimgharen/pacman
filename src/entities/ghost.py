@@ -13,6 +13,9 @@ class Ghost:
         self.frightened_timer = 0  # counts down when frightened
         self.dead_timer = 0  # counts down when dead
         self.frozen = False
+        self.move_timer = 0
+        self.last_dx = 0
+        self.last_dy = 0
 
     def frighten(self, duration: int):
         self.state = "FRIGHTENED"
@@ -41,22 +44,30 @@ class Ghost:
             if self.dead_timer <= 0:
                 self.respawn()
 
-    def move(self, maze: Maze, player: Player):
+    def move(self, maze: Maze, player: Player, dt: float = 0):
         if self.frozen:
             return
+        self.move_timer += dt
+        if self.move_timer < 0.4:
+            return
+        self.move_timer = 0
         if self.state == "DEAD":
             return
         directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
-        valid = [(dx, dy) for dx, dy in directions if maze.can_move(self.x, self.y, dx, dy)]
+        no_reverse = [(dx, dy) for dx, dy in directions
+                      if not (dx == -self.last_dx and dy == -self.last_dy)]
+        valid = [(dx, dy) for dx, dy in no_reverse if maze.can_move(self.x, self.y, dx, dy)]
+        if not valid:
+            valid = [(dx, dy) for dx, dy in directions if maze.can_move(self.x, self.y, dx, dy)]
         if self.state == "FRIGHTENED":
-            # return  possible valid moves
             if valid:
                 (dx, dy) = random.choice(valid)
                 self.x += dx
                 self.y += dy
+                self.last_dx, self.last_dy = dx, dy
         elif self.state == "CHASE":
-            # Move towards the player
             if valid:
                 (dx, dy) = min(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
                 self.x += dx
                 self.y += dy
+                self.last_dx, self.last_dy = dx, dy

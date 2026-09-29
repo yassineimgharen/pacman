@@ -1,8 +1,23 @@
 {
-    "aaa": "bbb",
-    "version": "1.0.0",
-    "settings": {
-        "option1": true,
-        "option2": false
-    }
+    "highscore_filename": "highscores.json",
+    "lives": 2,
+    "points_per_pacgum": 10,
+    "points_per_super_pacgum": 50,
+    "points_per_ghost": 200,
+    "frightened_duration": 8,
+    "ghost_respawn_delay": 5,
+    "level_max_time": 90,
+    "timeout_action": "gameover",
+    "levels": [
+        {"width": 21, "height": 21, "seed": 42},
+        {"width": 21, "height": 21, "seed": 0},
+        {"width": 23, "height": 23, "seed": 0},
+        {"width": 23, "height": 23, "seed": 0},
+        {"width": 25, "height": 25, "seed": 0},
+        {"width": 25, "height": 25, "seed": 0},
+        {"width": 27, "height": 27, "seed": 0},
+        {"width": 27, "height": 27, "seed": 0},
+        {"width": 29, "height": 29, "seed": 0},
+        {"width": 29, "height": 29, "seed": 0}
+    ]
 }

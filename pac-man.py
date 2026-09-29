@@ -1,6 +1,7 @@
 import sys
 from src.config import load
 from src.game.game import Game
+from src.ui.renderer import draw
 import pygame
 from src.game.highscore import save_scores
 
@@ -13,17 +14,18 @@ config_file = sys.argv[1]
 cfg = load(config_file)
 game = Game(cfg)
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 
 running = True
 current_level = 0
+tick = 0
 
 while running and current_level < len(cfg["levels"]):
     level = game.start_level(current_level)
     level_running = True
     while level_running:
-        dt = clock.tick(cfg["fps"]) / 1000
+        dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             # keydown = key was pressed
             if event.type == pygame.KEYDOWN:
@@ -58,5 +60,7 @@ while running and current_level < len(cfg["levels"]):
             level_running = False
         else:
             level.update(dt)
+        tick += 1
+        draw(screen, level, tick)
 pygame.quit()
 save_scores(cfg["highscore_filename"], game.scores)
