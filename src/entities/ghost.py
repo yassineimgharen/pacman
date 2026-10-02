@@ -16,6 +16,8 @@ class Ghost:
         self.move_timer = 0
         self.last_dx = 0
         self.last_dy = 0
+        self.rx = float(x)
+        self.ry = float(y)
 
     def frighten(self, duration: int):
         self.state = "FRIGHTENED"
@@ -28,12 +30,17 @@ class Ghost:
     def respawn(self):
         self.x = self.home_x
         self.y = self.home_y
+        self.rx = float(self.home_x)
+        self.ry = float(self.home_y)
         self.state = "CHASE"
         self.frightened_timer = 0
         self.dead_timer = 0
 
     # dt = ch hal aybqa in9s htta tsali o9t li hrban fiha ghost
-    def update(self, dt: int):
+    def update(self, dt: float):
+        speed = 5.0
+        self.rx += (self.x - self.rx) * min(1.0, speed * dt)
+        self.ry += (self.y - self.ry) * min(1.0, speed * dt)
         if self.state == "FRIGHTENED":
             self.frightened_timer -= dt
             if self.frightened_timer <= 0:

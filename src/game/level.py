@@ -51,6 +51,7 @@ class Level:
                     self.player.respawn(*self.maze.get_center())
                     for g in self.ghosts:
                         g.respawn()
+                    break
                 elif ghost.state == "FRIGHTENED":
                     ghost.die(self.cnfg["ghost_respawn_delay"])
                     self.player.add_score(self.cnfg["points_per_ghost"])
@@ -69,7 +70,7 @@ class Level:
             ghost.update(dt)
 
     def is_won(self) -> bool:
-        return len(self.pacgums) == 0
+        return all(self.maze.grid[y][x] == 15 for (x, y) in self.pacgums)
 
     def is_lost(self) -> bool:
         return self.player.lives <= 0 or self.timer <= 0

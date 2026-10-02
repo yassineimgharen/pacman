@@ -1,7 +1,6 @@
 import pygame
 import math
 
-CELL = 32
 WALL_COLOR = (33, 33, 222)
 BG_COLOR = (0, 0, 0)
 PACGUM_COLOR = (255, 222, 173)
@@ -12,11 +11,21 @@ FRIGHTENED_COLOR = (0, 0, 200)
 DEAD_COLOR = (100, 100, 255)
 
 
-def _draw_walls(screen, maze):
+HUD_HEIGHT = 50
+
+
+def _cell(screen, maze):
+    w, h = screen.get_size()
+    return min(w // maze.width, (h - HUD_HEIGHT) // maze.height)
+
+
+def _draw_walls(screen, maze, CELL):
     for y in range(maze.height):
         for x in range(maze.width):
-            rx, ry = x * CELL, y * CELL
+            rx, ry = x * CELL, y * CELL + HUD_HEIGHT
             cell = maze.grid[y][x]
+            if cell == 15:
+                pygame.draw.rect(screen, (40, 40, 40), (rx, ry, CELL, CELL))
             if cell & 1:
                 pygame.draw.line(screen, WALL_COLOR, (rx, ry), (rx + CELL, ry), 3)
             if cell & 2:
@@ -27,14 +36,13 @@ def _draw_walls(screen, maze):
                 pygame.draw.line(screen, WALL_COLOR, (rx, ry), (rx, ry + CELL), 3)
 
 
-def _draw_player(screen, player, tick):
+def _draw_player(screen, player, tick, CELL):
     cx = player.x * CELL + CELL // 2
-    cy = player.y * CELL + CELL // 2
+    cy = player.y * CELL + CELL // 2 + HUD_HEIGHT
     r = CELL // 2 - 3
     mouth = abs(math.sin(tick * 0.1)) * 40
     start_angle = math.radians(mouth)
     end_angle = math.radians(360 - mouth)
-    # direction offset
     angle_offset = {(1, 0): 0, (-1, 0): 180, (0, -1): 90, (0, 1): 270}.get((player.dx, player.dy), 0)
     start = math.radians(angle_offset) + start_angle
     end = math.radians(angle_offset) + end_angle
@@ -47,25 +55,22 @@ def _draw_player(screen, player, tick):
         pygame.draw.polygon(screen, PLAYER_COLOR, points)
 
 
-def _draw_ghost(screen, ghost, index, tick):
-    cx = ghost.x * CELL + CELL // 2
-    cy = ghost.y * CELL + CELL // 2
+def _draw_ghost(screen, ghost, index, tick, CELL):
+    cx = int(ghost.rx * CELL + CELL // 2)
+    cy = int(ghost.ry * CELL + CELL // 2 + HUD_HEIGHT)
     r = CELL // 2 - 3
 
     if ghost.state == "FRIGHTENED":
-        # flash white when about to expire
         color = (255, 255, 255) if (int(ghost.frightened_timer) % 2 == 0 and ghost.frightened_timer < 3) else FRIGHTENED_COLOR
     elif ghost.state == "DEAD":
         color = DEAD_COLOR
     else:
         color = GHOST_COLORS[index % len(GHOST_COLORS)]
 
-    # body
     body_rect = pygame.Rect(cx - r, cy - r, r * 2, r * 2)
     pygame.draw.ellipse(screen, color, body_rect)
     pygame.draw.rect(screen, color, (cx - r, cy, r * 2, r))
 
-    # wavy bottom
     wave_points = []
     segments = 4
     for i in range(segments + 1):
@@ -76,7 +81,6 @@ def _draw_ghost(screen, ghost, index, tick):
     wave_points.append((cx - r, cy))
     pygame.draw.polygon(screen, color, wave_points)
 
-    # eyes
     if ghost.state != "DEAD":
         eye_color = (255, 255, 255)
         pupil_color = (0, 0, 180)
@@ -86,23 +90,22 @@ def _draw_ghost(screen, ghost, index, tick):
 
 
 def draw(screen, level, tick=0):
+    CELL = _cell(screen, level.maze)
     screen.fill(BG_COLOR)
-    _draw_walls(screen, level.maze)
+    _draw_walls(screen, level.maze, CELL)
 
     for (x, y) in level.pacgums:
         if level.maze.grid[y][x] == 15:
             continue
-        cx, cy = x * CELL + CELL // 2, y * CELL + CELL // 2
-        pygame.draw.circle(screen, PACGUM_COLOR, (cx, cy), 3)
+        cx, cy = x * CELL + CELL // 2, y * CELL + CELL // 2 + HUD_HEIGHT
+        pygame.draw.circle(screen, PACGUM_COLOR, (cx, cy), max(2, CELL // 10))
 
     for (x, y) in level.super_pacgums:
-        cx, cy = x * CELL + CELL // 2, y * CELL + CELL // 2
-        pulse = int(4 + 3 * abs(math.sin(tick * 0.05)))
+        cx, cy = x * CELL + CELL // 2, y * CELL + CELL // 2 + HUD_HEIGHT
+        pulse = int(CELL // 6 + (CELL // 10) * abs(math.sin(tick * 0.05)))
         pygame.draw.circle(screen, SUPER_PACGUM_COLOR, (cx, cy), pulse)
 
     for i, ghost in enumerate(level.ghosts):
-        _draw_ghost(screen, ghost, i, tick)
+        _draw_ghost(screen, ghost, i, tick, CELL)
 
-    _draw_player(screen, level.player, tick)
-
-    pygame.display.flip()
+    _draw_player(screen, level.player, tick, CELL)

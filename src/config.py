@@ -77,11 +77,11 @@ def load(path: str) -> dict:
         validated_levels = []
         for i, level in enumerate(levels):
             width = level.get("width", 21)
-            if not isinstance(width, int) or width < 5:
+            if not isinstance(width, int) or width < 7:
                 print(f"Warning: invalid 'width' in level {i}, using default 21")
                 width = 21
             height = level.get("height", 21)
-            if not isinstance(height, int) or height < 5:
+            if not isinstance(height, int) or height < 7:
                 print(f"Warning: invalid 'height' in level {i}, using default 21")
                 height = 21
             seed = level.get("seed", 0)
