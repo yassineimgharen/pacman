@@ -73,3 +73,4 @@ West (-1,0) → open ✅ → (0,2) → distance = (0-4)²+(2-2)² = 16+0 = 16
 Ghost picks South → smallest distance 10 → moves to (1,3).
 
 From (1,3) next frame → keeps calculating → eventually finds path to player through the corridor
+

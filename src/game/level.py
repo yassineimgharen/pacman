@@ -40,6 +40,8 @@ class Level:
     # called every frame, moves ghosts, checks collisions, updates timer
     def update(self, dt: float):
         self.timer -= dt
+        if self.player.death_flash > 0:
+            self.player.death_flash -= dt
 
         for ghost in self.ghosts:
             ghost.move(self.maze, self.player, dt)
@@ -49,6 +51,7 @@ class Level:
                 if ghost.state == "CHASE" and not self.player.invincible:
                     self.player.lose_life()
                     self.player.respawn(*self.maze.get_center())
+                    self.player.death_flash = 0.5
                     for g in self.ghosts:
                         g.respawn()
                     break

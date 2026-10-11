@@ -5,6 +5,11 @@ from src.game.level import Level
 
 class Game():
     def __init__(self, cfg: dict):
+        """
+        Initialize the game with the given configuration.
+        a container that holds the player and scores,
+        and knows how to create levels
+        """
         self.cfg = cfg
         self.player = Player(0, 0, cfg["lives"])
         self.scores = load_score(cfg["highscore_filename"])

@@ -1,12 +1,17 @@
 import sys
+import os
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+sys.stderr = open(os.devnull, "w")
+import pygame
+sys.stderr = sys.__stderr__
+
 from src.config import load
 from src.game.game import Game
+from src.game.highscore import save_scores, add_score
 from src.ui.renderer import draw
 from src.ui.hud import draw_hud
 from src.ui.menu import get_player_name, draw_main_menu
-from src.game.highscore import save_scores, add_score
-import pygame
-
 
 if len(sys.argv) != 2:
     print("Usage: python pac-man.py <config_file>")
@@ -14,6 +19,7 @@ if len(sys.argv) != 2:
 
 config_file = sys.argv[1]
 cfg = load(config_file)
+
 game = Game(cfg)
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -29,6 +35,7 @@ while True:
     quit_early = False
     current_level = 0
     tick = 0
+    paused = False
 
     while running and current_level < len(cfg["levels"]):
         level = game.start_level(current_level)
@@ -46,6 +53,8 @@ while True:
                         level.player.move(-1, 0, level.maze)
                     elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         level.player.move(1, 0, level.maze)
+                    elif event.key == pygame.K_SPACE:
+                        paused = not paused
                     elif event.key == pygame.K_i:
                         level.player.invincible = not level.player.invincible
                     elif event.key == pygame.K_n:
@@ -56,6 +65,9 @@ while True:
                             ghost.frozen = not ghost.frozen
                     elif event.key == pygame.K_l:
                         level.player.lives += 1
+                    elif event.key == pygame.K_q:
+                        running = False
+                        level_running = False
                 #  player closed the window = stop
                 if event.type == pygame.QUIT:
                     running = False
@@ -67,12 +79,12 @@ while True:
             elif level.is_lost():
                 running = False
                 level_running = False
-            else:
+            elif not paused:
                 level.update(dt)
             tick += 1
             if not quit_early:
                 draw(screen, level, tick)
-                draw_hud(screen, level)
+                draw_hud(screen, level, current_level)
                 pygame.display.flip()
 
     if quit_early:

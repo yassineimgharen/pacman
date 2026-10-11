@@ -10,6 +10,7 @@ class Player:
         self.dx = 0
         self.dy = 0
         self.invincible = False
+        self.death_flash = 0.0
 
     def move(self, dx: int, dy: int, maze: Maze) -> None:
         if maze.can_move(self.x, self.y, dx, dy):

@@ -10,14 +10,14 @@
     "timeout_action": "gameover",
     "levels": [
         {"width": 9, "height": 9, "seed": 42},
-        {"width": 9, "height": 9, "seed": 1},
-        {"width": 11, "height": 11, "seed": 2},
-        {"width": 11, "height": 11, "seed": 3},
-        {"width": 13, "height": 13, "seed": 4},
-        {"width": 13, "height": 13, "seed": 5},
-        {"width": 15, "height": 15, "seed": 6},
-        {"width": 15, "height": 15, "seed": 7},
-        {"width": 17, "height": 17, "seed": 8},
-        {"width": 17, "height": 17, "seed": 9}
+        {"width": 11, "height": 11},
+        {"width": 11, "height": 11},
+        {"width": 13, "height": 13},
+        {"width": 13, "height": 13},
+        {"width": 15, "height": 15},
+        {"width": 15, "height": 15},
+        {"width": 17, "height": 17},
+        {"width": 17, "height": 17},
+        {"width": 19, "height": 19}
     ]
 }

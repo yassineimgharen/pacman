@@ -40,6 +40,10 @@ def _draw_player(screen, player, tick, CELL):
     cx = player.x * CELL + CELL // 2
     cy = player.y * CELL + CELL // 2 + HUD_HEIGHT
     r = CELL // 2 - 3
+    if getattr(player, 'death_flash', 0) > 0:
+        color = (255, 0, 0) if int(player.death_flash * 10) % 2 == 0 else (255, 255, 0)
+        pygame.draw.circle(screen, color, (cx, cy), r)
+        return
     mouth = abs(math.sin(tick * 0.1)) * 40
     start_angle = math.radians(mouth)
     end_angle = math.radians(360 - mouth)
