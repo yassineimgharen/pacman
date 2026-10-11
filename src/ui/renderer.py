@@ -9,9 +9,16 @@ PLAYER_COLOR = (255, 255, 0)
 GHOST_COLORS = [(255, 0, 0), (255, 184, 255), (0, 255, 255), (255, 184, 82)]
 FRIGHTENED_COLOR = (0, 0, 200)
 DEAD_COLOR = (100, 100, 255)
-
-
 HUD_HEIGHT = 50
+
+def _draw_bg(screen, tick):
+    w, h = screen.get_size()
+    screen.fill((int(10+10*math.sin(tick*0.01)), 0, int(30+20*math.cos(tick*0.007))))
+    surf = pygame.Surface((w, h), pygame.SRCALPHA)
+    for i in range(60):
+        pygame.draw.circle(surf, (int(128+127*math.sin(tick*0.03+i*0.5)), 50, 200, 80),
+                           ((i * 137 + tick) % w, (i * 97 - tick) % h + HUD_HEIGHT), 1 + i % 3)
+    screen.blit(surf, (0, 0))
 
 
 def _cell(screen, maze):
@@ -95,7 +102,7 @@ def _draw_ghost(screen, ghost, index, tick, CELL):
 
 def draw(screen, level, tick=0):
     CELL = _cell(screen, level.maze)
-    screen.fill(BG_COLOR)
+    _draw_bg(screen, tick)
     _draw_walls(screen, level.maze, CELL)
 
     for (x, y) in level.pacgums:
