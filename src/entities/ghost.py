@@ -1,11 +1,15 @@
+import random
 from src.maze import Maze
+from src.entities.entity import Entity
 from src.entities.player import Player
 
 
-class Ghost:
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
+class Ghost(Entity):
+    """Represents a ghost enemy in the maze."""
+
+    def __init__(self, x: int, y: int) -> None:
+        """Initialize ghost at corner position."""
+        super().__init__(x, y)
         self.home_x = x
         self.home_y = y
         self.state = "CHASE"
@@ -18,15 +22,18 @@ class Ghost:
         self.rx = float(x)
         self.ry = float(y)
 
-    def frighten(self, duration: int):
+    def frighten(self, duration: int) -> None:
+        """Set ghost to frightened state for given duration."""
         self.state = "FRIGHTENED"
         self.frightened_timer = duration
 
-    def die(self, duration: int):
+    def die(self, duration: int) -> None:
+        """Set ghost to dead state for given duration."""
         self.state = "DEAD"
         self.dead_timer = duration
 
-    def respawn(self):
+    def respawn(self) -> None:
+        """Reset ghost to home corner."""
         self.x = self.home_x
         self.y = self.home_y
         self.rx = float(self.home_x)
@@ -35,8 +42,8 @@ class Ghost:
         self.frightened_timer = 0
         self.dead_timer = 0
 
-    # dt = ch hal aybqa in9s htta tsali o9t li hrban fiha ghost
-    def update(self, dt: float):
+    def update(self, dt: float) -> None:
+        """Update ghost timers and smooth render position."""
         speed = 5.0
         self.rx += (self.x - self.rx) * min(1.0, speed * dt)
         self.ry += (self.y - self.ry) * min(1.0, speed * dt)
@@ -50,7 +57,8 @@ class Ghost:
             if self.dead_timer <= 0:
                 self.respawn()
 
-    def move(self, maze: Maze, player: Player, dt: float = 0):
+    def move(self, maze: Maze, player: Player, dt: float = 0) -> None:
+        """Move ghost based on state: chase, flee, or stay dead."""
         if self.frozen:
             return
         self.move_timer += dt
@@ -67,13 +75,11 @@ class Ghost:
             valid = [(dx, dy) for dx, dy in directions if maze.can_move(self.x, self.y, dx, dy)]
         if self.state == "FRIGHTENED":
             if valid:
-                (dx, dy) = max(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
-                self.x += dx
-                self.y += dy
+                dx, dy = random.choice(valid)
+                super().move(dx, dy, maze)
                 self.last_dx, self.last_dy = dx, dy
         elif self.state == "CHASE":
             if valid:
-                (dx, dy) = min(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
-                self.x += dx
-                self.y += dy
+                dx, dy = min(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
+                super().move(dx, dy, maze)
                 self.last_dx, self.last_dy = dx, dy
