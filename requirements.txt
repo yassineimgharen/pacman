@@ -1,0 +1,2 @@
+pygame==2.6.1
+mazegenerator @ file:///home/kali/pacman/mazegenerator-00001-py3-none-any.whl

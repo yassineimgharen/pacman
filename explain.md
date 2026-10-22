@@ -56,7 +56,7 @@ example:
 |  |           |
 +  +  +--+--+  +
 |     |     |  |
-+--+--+  +  +  +
++--+--+  +  +  +      
 |   G |  |    P|
 +--+  +--+  +  +
 |              |
@@ -72,5 +72,46 @@ West (-1,0) → open ✅ → (0,2) → distance = (0-4)²+(2-2)² = 16+0 = 16
 
 Ghost picks South → smallest distance 10 → moves to (1,3).
 
+ghost's new x minus player's x 
+ghost's new y minus player's y
+
 From (1,3) next frame → keeps calculating → eventually finds path to player through the corridor
 
+
+# check if a wall open
+
+North = 1 = 0001
+East  = 2 = 0010
+South = 4 = 0100
+West  = 8 = 1000
+
+Think of the cell value as 4 light switches, one per wall:
+
+bit 3  bit 2  bit 1  bit 0
+West   South  East   North
+
+Copy
+Cell value 9 = 1001 in binary means:
+
+West=1  South=0  East=0  North=1
+ ON      OFF      OFF     ON
+
+Copy
+→ West wall ON, North wall ON, East and South walls OFF.
+
+To check if North wall exists, you check bit 0:
+
+9 & 1 → is bit 0 ON?
+1001
+0001
+----
+0001 = 1 → ON → wall exists → can't move North
+
+Copy
+To check if East wall exists, you check bit 1:
+
+9 & 2 → is bit 1 ON?
+1001
+0010
+----
+0000 = 0 → OFF → no wall → can move East

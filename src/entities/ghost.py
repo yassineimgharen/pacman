@@ -1,6 +1,5 @@
 from src.maze import Maze
 from src.entities.player import Player
-import random
 
 
 class Ghost:
@@ -10,8 +9,8 @@ class Ghost:
         self.home_x = x
         self.home_y = y
         self.state = "CHASE"
-        self.frightened_timer = 0  # counts down when frightened
-        self.dead_timer = 0  # counts down when dead
+        self.frightened_timer = 0
+        self.dead_timer = 0
         self.frozen = False
         self.move_timer = 0
         self.last_dx = 0
@@ -68,7 +67,7 @@ class Ghost:
             valid = [(dx, dy) for dx, dy in directions if maze.can_move(self.x, self.y, dx, dy)]
         if self.state == "FRIGHTENED":
             if valid:
-                (dx, dy) = random.choice(valid)
+                (dx, dy) = max(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
                 self.x += dx
                 self.y += dy
                 self.last_dx, self.last_dy = dx, dy
