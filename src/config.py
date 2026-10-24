@@ -17,7 +17,6 @@ def load(path: str) -> dict:
             content = file.read()
         cleaned = _strip_comments(content)
         data = json.loads(cleaned)
-
         cfg = {}
 
         def _get(key, default):

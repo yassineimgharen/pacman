@@ -21,7 +21,6 @@ class Level:
         cx, cy = self.maze.get_center()
         self.player.respawn(cx, cy)
 
-        # get corners of the maze
         corners = self.maze.get_corners()
 
         # build pacgums set — all walkable cells except corners and center:
@@ -29,7 +28,8 @@ class Level:
         for y in range(self.height):
             for x in range(self.width):
                 if (x, y) not in corners and (x, y) != (cx, cy):
-                    self.pacgums.add((x, y))
+                    if self.maze.grid[y][x] != 15:
+                        self.pacgums.add((x, y))
 
         self.super_pacgums = set(corners)
 
@@ -73,7 +73,7 @@ class Level:
             ghost.update(dt)
 
     def is_won(self) -> bool:
-        return all(self.maze.grid[y][x] == 15 for (x, y) in self.pacgums)
+        return len(self.pacgums) == 0 and len(self.super_pacgums) == 0
 
     def is_lost(self) -> bool:
         return self.player.lives <= 0 or self.timer <= 0

@@ -10,7 +10,6 @@ def load_score(path: str) -> list:
         if not raw.strip():
             return []
         content = json.loads(raw)
-        # ila makantch content list
         if not isinstance(content, list):
             print(f"Warning: invalid format in {path}, resetting scores.")
             return []
@@ -40,4 +39,4 @@ def add_score(scores: list, name: str, score: int) -> list:
         name = "Player"
     scores.append({"name": name, "score": score})
     scores.sort(key=lambda x: x["score"], reverse=True)
-    return scores[:10]  # khlli 10 lwlin
+    return scores[:10]
