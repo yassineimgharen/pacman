@@ -57,7 +57,8 @@ def load(path: str) -> dict:
 
         highscore_filename = _get("highscore_filename", "highscores.json")
         if not isinstance(highscore_filename, str) or not highscore_filename:
-            print("Warning: invalid 'highscore_filename', using default highscores.json")
+            print("Warning: invalid 'highscore_filename', "
+                  "using default highscores.json")
             highscore_filename = "highscores.json"
         cfg["highscore_filename"] = highscore_filename
 
@@ -75,7 +76,10 @@ def load(path: str) -> dict:
 
         # validate levels
         levels = data.get("levels", [])
-        if not isinstance(levels, list) or not all(isinstance(level, dict) for level in levels):
+        if (
+            not isinstance(levels, list)
+            or not all(isinstance(level, dict) for level in levels)
+        ):
             print("Warning: invalid 'levels', using default []")
             levels = []
 
@@ -83,17 +87,21 @@ def load(path: str) -> dict:
         for i, level in enumerate(levels):
             width = level.get("width", 21)
             if not isinstance(width, int) or width < 5:
-                print(f"Warning: invalid 'width' in level {i}, using default 21")
+                print(f"Warning: invalid 'width' in level {i}, "
+                      "using default 21")
                 width = 21
             height = level.get("height", 21)
             if not isinstance(height, int) or height < 5:
-                print(f"Warning: invalid 'height' in level {i}, using default 21")
+                print(f"Warning: invalid 'height' in level {i}, "
+                      "using default 21")
                 height = 21
             seed = level.get("seed", 0)
             if not isinstance(seed, int) or seed < 0:
                 print(f"Warning: invalid 'seed' in level {i}, using default 0")
                 seed = 0
-            validated_levels.append({"width": width, "height": height, "seed": seed})
+            validated_levels.append({"width": width,
+                                     "height": height,
+                                     "seed": seed})
 
         while len(validated_levels) < 10:
             validated_levels.append({"width": 21, "height": 21, "seed": 0})

@@ -11,13 +11,17 @@ FRIGHTENED_COLOR = (0, 0, 200)
 DEAD_COLOR = (100, 100, 255)
 HUD_HEIGHT = 50
 
+
 def _draw_bg(screen, tick):
     w, h = screen.get_size()
-    screen.fill((int(10+10*math.sin(tick*0.01)), 0, int(30+20*math.cos(tick*0.007))))
+    screen.fill((int(10+10*math.sin(tick*0.01)), 0,
+                 int(30+20*math.cos(tick*0.007))))
     surf = pygame.Surface((w, h), pygame.SRCALPHA)
     for i in range(60):
-        pygame.draw.circle(surf, (int(128+127*math.sin(tick*0.03+i*0.5)), 50, 200, 80),
-                           ((i * 137 + tick) % w, (i * 97 - tick) % h + HUD_HEIGHT), 1 + i % 3)
+        pygame.draw.circle(surf, (int(128+127*math.sin(tick*0.03+i*0.5)),
+                                  50, 200, 80),
+                           ((i * 137 + tick) % w,
+                            (i * 97 - tick) % h + HUD_HEIGHT), 1 + i % 3)
     screen.blit(surf, (0, 0))
 
 
@@ -34,13 +38,17 @@ def _draw_walls(screen, maze, CELL):
             if cell == 15:
                 pygame.draw.rect(screen, (40, 40, 40), (rx, ry, CELL, CELL))
             if cell & 1:
-                pygame.draw.line(screen, WALL_COLOR, (rx, ry), (rx + CELL, ry), 3)
+                pygame.draw.line(screen, WALL_COLOR,
+                                 (rx, ry), (rx + CELL, ry), 3)
             if cell & 2:
-                pygame.draw.line(screen, WALL_COLOR, (rx + CELL, ry), (rx + CELL, ry + CELL), 3)
+                pygame.draw.line(screen, WALL_COLOR,
+                                 (rx + CELL, ry), (rx + CELL, ry + CELL), 3)
             if cell & 4:
-                pygame.draw.line(screen, WALL_COLOR, (rx, ry + CELL), (rx + CELL, ry + CELL), 3)
+                pygame.draw.line(screen, WALL_COLOR,
+                                 (rx, ry + CELL), (rx + CELL, ry + CELL), 3)
             if cell & 8:
-                pygame.draw.line(screen, WALL_COLOR, (rx, ry), (rx, ry + CELL), 3)
+                pygame.draw.line(screen, WALL_COLOR,
+                                 (rx, ry), (rx, ry + CELL), 3)
 
 
 def _draw_player(screen, player, tick, CELL):
@@ -48,13 +56,18 @@ def _draw_player(screen, player, tick, CELL):
     cy = player.y * CELL + CELL // 2 + HUD_HEIGHT
     r = CELL // 2 - 3
     if getattr(player, 'death_flash', 0) > 0:
-        color = (255, 0, 0) if int(player.death_flash * 10) % 2 == 0 else (255, 255, 0)
+        color = (
+            (255, 0, 0)
+            if int(player.death_flash * 10) % 2 == 0
+            else (255, 255, 0)
+        )
         pygame.draw.circle(screen, color, (cx, cy), r)
         return
     mouth = abs(math.sin(tick * 0.1)) * 40
     start_angle = math.radians(mouth)
     end_angle = math.radians(360 - mouth)
-    angle_offset = {(1, 0): 0, (-1, 0): 180, (0, -1): 90, (0, 1): 270}.get((player.dx, player.dy), 0)
+    angle_offset = {(1, 0): 0, (-1, 0): 180,
+                    (0, -1): 90, (0, 1): 270}.get((player.dx, player.dy), 0)
     start = math.radians(angle_offset) + start_angle
     end = math.radians(angle_offset) + end_angle
     points = [(cx, cy)]
@@ -72,7 +85,12 @@ def _draw_ghost(screen, ghost, index, tick, CELL):
     r = CELL // 2 - 3
 
     if ghost.state == "FRIGHTENED":
-        color = (255, 255, 255) if (int(ghost.frightened_timer) % 2 == 0 and ghost.frightened_timer < 3) else FRIGHTENED_COLOR
+        color = (
+            (255, 255, 255)
+            if int(ghost.frightened_timer) % 2 == 0
+            and ghost.frightened_timer < 3
+            else FRIGHTENED_COLOR
+        )
     elif ghost.state == "DEAD":
         color = DEAD_COLOR
     else:
@@ -97,7 +115,8 @@ def _draw_ghost(screen, ghost, index, tick, CELL):
         pupil_color = (0, 0, 180)
         for ex in [cx - r // 3, cx + r // 3]:
             pygame.draw.circle(screen, eye_color, (ex, cy - r // 4), r // 4)
-            pygame.draw.circle(screen, pupil_color, (ex + 1, cy - r // 4 + 1), r // 8)
+            pygame.draw.circle(screen, pupil_color,
+                               (ex + 1, cy - r // 4 + 1), r // 8)
 
 
 def draw(screen, level, tick=0):

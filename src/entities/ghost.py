@@ -70,9 +70,11 @@ class Ghost(Entity):
         directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
         no_reverse = [(dx, dy) for dx, dy in directions
                       if not (dx == -self.last_dx and dy == -self.last_dy)]
-        valid = [(dx, dy) for dx, dy in no_reverse if maze.can_move(self.x, self.y, dx, dy)]
+        valid = [(dx, dy) for dx, dy in no_reverse
+                 if maze.can_move(self.x, self.y, dx, dy)]
         if not valid:
-            valid = [(dx, dy) for dx, dy in directions if maze.can_move(self.x, self.y, dx, dy)]
+            valid = [(dx, dy) for dx, dy in directions
+                     if maze.can_move(self.x, self.y, dx, dy)]
         if self.state == "FRIGHTENED":
             if valid:
                 dx, dy = random.choice(valid)
@@ -80,6 +82,8 @@ class Ghost(Entity):
                 self.last_dx, self.last_dy = dx, dy
         elif self.state == "CHASE":
             if valid:
-                dx, dy = min(valid, key=lambda d: (self.x+d[0]-player.x)**2 + (self.y+d[1]-player.y)**2)
+                dx, dy = min(valid,
+                             key=lambda d: (self.x+d[0]-player.x)**2
+                             + (self.y+d[1]-player.y)**2)
                 super().move(dx, dy, maze)
                 self.last_dx, self.last_dy = dx, dy

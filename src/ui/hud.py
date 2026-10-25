@@ -35,4 +35,5 @@ def draw_hud(screen: object, level: object, current_level: int = 0) -> None:
     if panel_x + 50 < w:
         for i, line in enumerate(CONTROLS):
             color = (255, 255, 0) if line.startswith("--") else (200, 200, 200)
-            screen.blit(tiny.render(line, True, color), (panel_x, HUD_HEIGHT + 10 + i * 22))
+            screen.blit(tiny.render(line, True, color),
+                        (panel_x, HUD_HEIGHT + 10 + i * 22))

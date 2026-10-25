@@ -40,4 +40,7 @@ class Maze:
         """
         Get the corners of the maze.
         """
-        return [(0, 0), (self.width - 1, 0), (0, self.height - 1), (self.width - 1, self.height - 1)]
+        return [(0, 0),
+                (self.width - 1, 0),
+                (0, self.height - 1),
+                (self.width - 1, self.height - 1)]
