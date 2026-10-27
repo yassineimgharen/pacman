@@ -2,3 +2,4 @@ pygame==2.6.1
 ./mazegenerator-00001-py3-none-any.whl
 flake8
 mypy
+pyinstaller

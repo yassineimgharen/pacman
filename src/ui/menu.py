@@ -1,5 +1,6 @@
 import pygame
 import re
+from src.ui.hud import CONTROLS
 
 
 def draw_main_menu(screen: pygame.Surface, scores: list) -> str:
@@ -22,6 +23,10 @@ def draw_main_menu(screen: pygame.Surface, scores: list) -> str:
             line = tiny.render(f"{i+1}. {entry['name']} - {entry['score']}",
                                True, (200, 200, 200))
             screen.blit(line, (w // 2 - 120, 350 + i * 30))
+        for i, text in enumerate(CONTROLS):
+            color = (255, 255, 0) if text.startswith("--") else (200, 200, 200)
+            screen.blit(tiny.render(text, True, color),
+                        (w - 280, 310 + i * 30))
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
