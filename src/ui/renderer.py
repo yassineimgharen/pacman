@@ -1,5 +1,9 @@
 import pygame
 import math
+from src.maze import Maze
+from src.entities.player import Player
+from src.entities.ghost import Ghost
+from src.game.level import Level
 
 WALL_COLOR = (33, 33, 222)
 BG_COLOR = (0, 0, 0)
@@ -12,7 +16,7 @@ DEAD_COLOR = (100, 100, 255)
 HUD_HEIGHT = 50
 
 
-def _draw_bg(screen, tick):
+def _draw_bg(screen: pygame.Surface, tick: int) -> None:
     w, h = screen.get_size()
     screen.fill((int(10+10*math.sin(tick*0.01)), 0,
                  int(30+20*math.cos(tick*0.007))))
@@ -25,12 +29,12 @@ def _draw_bg(screen, tick):
     screen.blit(surf, (0, 0))
 
 
-def _cell(screen, maze):
+def _cell(screen: pygame.Surface, maze: Maze) -> int:
     w, h = screen.get_size()
     return min(w // maze.width, (h - HUD_HEIGHT) // maze.height)
 
 
-def _draw_walls(screen, maze, CELL):
+def _draw_walls(screen: pygame.Surface, maze: Maze, CELL: int) -> None:
     for y in range(maze.height):
         for x in range(maze.width):
             rx, ry = x * CELL, y * CELL + HUD_HEIGHT
@@ -51,7 +55,8 @@ def _draw_walls(screen, maze, CELL):
                                  (rx, ry), (rx, ry + CELL), 3)
 
 
-def _draw_player(screen, player, tick, CELL):
+def _draw_player(screen: pygame.Surface, player: Player,
+                 tick: int, CELL: int) -> None:
     cx = player.x * CELL + CELL // 2
     cy = player.y * CELL + CELL // 2 + HUD_HEIGHT
     r = CELL // 2 - 3
@@ -70,7 +75,7 @@ def _draw_player(screen, player, tick, CELL):
                     (0, -1): 90, (0, 1): 270}.get((player.dx, player.dy), 0)
     start = math.radians(angle_offset) + start_angle
     end = math.radians(angle_offset) + end_angle
-    points = [(cx, cy)]
+    points: list[tuple[float, float]] = [(cx, cy)]
     steps = 30
     for i in range(steps + 1):
         a = start + (end - start) * i / steps
@@ -79,7 +84,8 @@ def _draw_player(screen, player, tick, CELL):
         pygame.draw.polygon(screen, PLAYER_COLOR, points)
 
 
-def _draw_ghost(screen, ghost, index, tick, CELL):
+def _draw_ghost(screen: pygame.Surface, ghost: Ghost, index: int,
+                tick: int, CELL: int) -> None:
     cx = int(ghost.rx * CELL + CELL // 2)
     cy = int(ghost.ry * CELL + CELL // 2 + HUD_HEIGHT)
     r = CELL // 2 - 3
@@ -119,7 +125,7 @@ def _draw_ghost(screen, ghost, index, tick, CELL):
                                (ex + 1, cy - r // 4 + 1), r // 8)
 
 
-def draw(screen, level, tick=0):
+def draw(screen: pygame.Surface, level: Level, tick: int = 0) -> None:
     CELL = _cell(screen, level.maze)
     _draw_bg(screen, tick)
     _draw_walls(screen, level.maze, CELL)

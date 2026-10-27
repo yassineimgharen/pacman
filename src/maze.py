@@ -6,7 +6,7 @@ class Maze:
     def __init__(self, width: int, height: int, seed: int) -> None:
         try:
             mg = MazeGenerator(size=(width, height), perfect=False, seed=seed)
-            self.grid = mg.maze
+            self.grid: list[list[int]] = mg.maze
         except Exception as e:
             print(f"Maze generation failed: {e}")
             sys.exit(1)
@@ -20,13 +20,13 @@ class Maze:
         nx, ny = x + dx, y + dy
         if not (0 <= nx < self.width and 0 <= ny < self.height):
             return False
-        if dx == 1:    # East
+        if dx == 1:
             bit = 2
-        elif dx == -1:  # West
+        elif dx == -1:
             bit = 8
-        elif dy == -1:  # North
+        elif dy == -1:
             bit = 1
-        else:           # South
+        else:
             bit = 4
         return (self.grid[y][x] & bit) == 0
 

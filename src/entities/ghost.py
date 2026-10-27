@@ -13,10 +13,10 @@ class Ghost(Entity):
         self.home_x = x
         self.home_y = y
         self.state = "CHASE"
-        self.frightened_timer = 0
-        self.dead_timer = 0
+        self.frightened_timer = 0.0
+        self.dead_timer = 0.0
         self.frozen = False
-        self.move_timer = 0
+        self.move_timer = 0.0
         self.last_dx = 0
         self.last_dy = 0
         self.rx = float(x)
@@ -57,7 +57,7 @@ class Ghost(Entity):
             if self.dead_timer <= 0:
                 self.respawn()
 
-    def move(self, maze: Maze, player: Player, dt: float = 0) -> None:
+    def ai_move(self, maze: Maze, player: Player, dt: float = 0) -> None:
         """Move ghost based on state: chase, flee, or stay dead."""
         if self.frozen:
             return

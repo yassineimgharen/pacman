@@ -115,3 +115,11 @@ To check if East wall exists, you check bit 1:
 0010
 ----
 0000 = 0 → OFF → no wall → can move East
+
+# understand bitwising
+Worked example: cell = 6 is 0110 in binary.
+
+6 & 2 = 2, so there's a wall to the east.
+6 & 4 = 4, so there's a wall to the south.
+6 & 1 = 0, so north is open.
+6 & 8 = 0, so west is open.

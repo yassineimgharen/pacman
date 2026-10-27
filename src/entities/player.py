@@ -13,9 +13,9 @@ class Player(Entity):
         self.invincible = False
         self.death_flash = 0.0
 
-    def move(self, dx: int, dy: int, maze: Maze) -> None:
+    def move(self, dx: int, dy: int, maze: Maze) -> bool:
         """Move player if no wall blocks the path."""
-        super().move(dx, dy, maze)
+        return super().move(dx, dy, maze)
 
     def lose_life(self) -> None:
         """Decrease player lives by 1."""

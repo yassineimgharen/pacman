@@ -2,7 +2,7 @@ import pygame
 import re
 
 
-def draw_main_menu(screen: object, scores: list) -> str:
+def draw_main_menu(screen: pygame.Surface, scores: list) -> str:
     """Draw main menu, return 'play' or 'quit'."""
     font = pygame.font.SysFont(None, 72)
     small = pygame.font.SysFont(None, 36)
@@ -33,7 +33,8 @@ def draw_main_menu(screen: object, scores: list) -> str:
                     return "quit"
 
 
-def get_player_name(screen: object, score: int, won: bool) -> str:
+def get_player_name(screen: pygame.Surface, score: int,
+                    won: bool) -> str:
     """Prompt player to enter their name after game ends."""
     font = pygame.font.SysFont(None, 72)
     small = pygame.font.SysFont(None, 36)

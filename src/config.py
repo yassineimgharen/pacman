@@ -1,5 +1,6 @@
 import json
 import sys
+from typing import Any
 
 
 def _strip_comments(text: str) -> str:
@@ -17,9 +18,9 @@ def load(path: str) -> dict:
             content = file.read()
         cleaned = _strip_comments(content)
         data = json.loads(cleaned)
-        cfg = {}
+        cfg: dict[str, Any] = {}
 
-        def _get(key, default):
+        def _get(key: str, default: Any) -> Any:
             if key not in data:
                 print(f"Warning: missing '{key}', using default {default}")
             return data.get(key, default)

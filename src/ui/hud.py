@@ -1,4 +1,5 @@
 import pygame
+from src.game.level import Level
 
 CONTROLS = [
     "-- Controls --",
@@ -14,7 +15,8 @@ CONTROLS = [
 ]
 
 
-def draw_hud(screen: object, level: object, current_level: int = 0) -> None:
+def draw_hud(screen: pygame.Surface, level: Level,
+             current_level: int = 0) -> None:
     """Draw HUD with score, lives, timer and controls panel."""
     font = pygame.font.SysFont(None, 36)
     tiny = pygame.font.SysFont(None, 24)

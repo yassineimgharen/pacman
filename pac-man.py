@@ -3,15 +3,17 @@ import os
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 sys.stderr = open(os.devnull, "w")
-import pygame
+
+import pygame  # noqa: E402
+
 sys.stderr = sys.__stderr__
 
-from src.config import load
-from src.game.game import Game
-from src.game.highscore import save_scores, add_score
-from src.ui.renderer import draw
-from src.ui.hud import draw_hud
-from src.ui.menu import get_player_name, draw_main_menu
+from src.config import load  # noqa: E402
+from src.game.game import Game  # noqa: E402
+from src.game.highscore import save_scores, add_score  # noqa: E402
+from src.ui.renderer import draw  # noqa: E402
+from src.ui.hud import draw_hud  # noqa: E402
+from src.ui.menu import get_player_name, draw_main_menu  # noqa: E402
 
 if len(sys.argv) != 2:
     print("Usage: python pac-man.py <config_file>")
@@ -51,7 +53,7 @@ while True:
                         level.player.move(0, 1, level.maze)
                     elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                         level.player.move(-1, 0, level.maze)
-                    elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    elif event.key in (pygame.K_RIGHT, pygame.K_d):
                         level.player.move(1, 0, level.maze)
                     elif event.key == pygame.K_SPACE:
                         paused = not paused

@@ -17,7 +17,6 @@ class Level:
         self.cnfg = cnfg
         self.maze = Maze(self.width, self.height, self.seed)
 
-        # place player at center:
         cx, cy = self.maze.get_center()
         self.player.respawn(cx, cy)
 
@@ -38,13 +37,13 @@ class Level:
         self.timer = cnfg["level_max_time"]
 
     # called every frame, moves ghosts, checks collisions, updates timer
-    def update(self, dt: float):
+    def update(self, dt: float) -> None:
         self.timer -= dt
         if self.player.death_flash > 0:
             self.player.death_flash -= dt
 
         for ghost in self.ghosts:
-            ghost.move(self.maze, self.player, dt)
+            ghost.ai_move(self.maze, self.player, dt)
 
         for ghost in self.ghosts:
             if ghost.x == self.player.x and ghost.y == self.player.y:
