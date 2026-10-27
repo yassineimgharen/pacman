@@ -8,3 +8,4 @@ dist/
 build/
 *.egg-info/
 explain.md
+historique.md
