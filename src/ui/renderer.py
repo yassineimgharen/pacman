@@ -1,3 +1,5 @@
+"""Draw the maze, the pacgums, the player and the ghosts."""
+
 import pygame
 import math
 from src.maze import Maze
@@ -17,6 +19,7 @@ HUD_HEIGHT = 50
 
 
 def _draw_bg(screen: pygame.Surface, tick: int) -> None:
+    """Draw the animated background."""
     w, h = screen.get_size()
     screen.fill((int(10+10*math.sin(tick*0.01)), 0,
                  int(30+20*math.cos(tick*0.007))))
@@ -30,11 +33,17 @@ def _draw_bg(screen: pygame.Surface, tick: int) -> None:
 
 
 def _cell(screen: pygame.Surface, maze: Maze) -> int:
+    """Compute the size of a maze cell in pixels.
+
+    Returns:
+        The cell size in pixels.
+    """
     w, h = screen.get_size()
     return min(w // maze.width, (h - HUD_HEIGHT) // maze.height)
 
 
 def _draw_walls(screen: pygame.Surface, maze: Maze, CELL: int) -> None:
+    """Draw the walls of every cell from its wall bits."""
     for y in range(maze.height):
         for x in range(maze.width):
             rx, ry = x * CELL, y * CELL + HUD_HEIGHT
@@ -57,6 +66,10 @@ def _draw_walls(screen: pygame.Surface, maze: Maze, CELL: int) -> None:
 
 def _draw_player(screen: pygame.Surface, player: Player,
                  tick: int, CELL: int) -> None:
+    """Draw Pac-Man with an animated mouth facing its direction.
+
+    Draws a flashing circle instead while death_flash is active.
+    """
     cx = player.x * CELL + CELL // 2
     cy = player.y * CELL + CELL // 2 + HUD_HEIGHT
     r = CELL // 2 - 3
@@ -86,6 +99,7 @@ def _draw_player(screen: pygame.Surface, player: Player,
 
 def _draw_ghost(screen: pygame.Surface, ghost: Ghost, index: int,
                 tick: int, CELL: int) -> None:
+    """Draw a ghost with a color that depends on its state."""
     cx = int(ghost.rx * CELL + CELL // 2)
     cy = int(ghost.ry * CELL + CELL // 2 + HUD_HEIGHT)
     r = CELL // 2 - 3
@@ -126,6 +140,7 @@ def _draw_ghost(screen: pygame.Surface, ghost: Ghost, index: int,
 
 
 def draw(screen: pygame.Surface, level: Level, tick: int = 0) -> None:
+    """Draw one frame of the level."""
     CELL = _cell(screen, level.maze)
     _draw_bg(screen, tick)
     _draw_walls(screen, level.maze, CELL)

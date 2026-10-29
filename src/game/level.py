@@ -1,15 +1,19 @@
+"""A single level: maze, pacgums, ghosts and game rules."""
+
 from src.entities.player import Player
 from src.entities.ghost import Ghost
 from src.maze import Maze
 
 
 class Level:
+    """One level of the game."""
     def __init__(self,
                  width: int,
                  height: int,
                  seed: int,
                  player: Player,
                  cnfg: dict):
+        """Generate the maze and place the player, ghosts and pacgums."""
         self.width = width
         self.height = height
         self.seed = seed
@@ -38,6 +42,11 @@ class Level:
 
     # called every frame, moves ghosts, checks collisions, updates timer
     def update(self, dt: float) -> None:
+        """Update the level for one frame.
+
+        Counts down the timer, moves the ghosts, handles collisions between
+        the player and the ghosts, and lets the player eat pacgums.
+        """
         self.timer -= dt
         if self.player.death_flash > 0:
             self.player.death_flash -= dt
@@ -72,7 +81,17 @@ class Level:
             ghost.update(dt)
 
     def is_won(self) -> bool:
+        """Check if the level is won.
+
+        Returns:
+            True when every pacgum and super-pacgum has been eaten.
+        """
         return len(self.pacgums) == 0 and len(self.super_pacgums) == 0
 
     def is_lost(self) -> bool:
+        """Check if the level is lost.
+
+        Returns:
+            True when the player has no lives left or the timer is over.
+        """
         return self.player.lives <= 0 or self.timer <= 0

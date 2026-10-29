@@ -1,10 +1,18 @@
+"""Main menu and name entry screens."""
+
 import pygame
 import re
 from src.ui.hud import CONTROLS
 
 
 def draw_main_menu(screen: pygame.Surface, scores: list) -> str:
-    """Draw main menu, return 'play' or 'quit'."""
+    """Show the main menu until the player makes a choice.
+
+    Displays the title, the top 10 highscores and the controls.
+
+    Returns:
+        "play" when ENTER is pressed, "quit" on Q or window close.
+    """
     font = pygame.font.SysFont(None, 72)
     small = pygame.font.SysFont(None, 36)
     tiny = pygame.font.SysFont(None, 28)
@@ -40,7 +48,13 @@ def draw_main_menu(screen: pygame.Surface, scores: list) -> str:
 
 def get_player_name(screen: pygame.Surface, score: int,
                     won: bool) -> str:
-    """Prompt player to enter their name after game ends."""
+    """Ask the player for a name at the end of a game.
+
+    Only letters, digits and spaces are accepted, up to 10 characters.
+
+    Returns:
+        The entered name, or "Player" if it is empty.
+    """
     font = pygame.font.SysFont(None, 72)
     small = pygame.font.SysFont(None, 36)
     w, h = screen.get_size()

@@ -1,8 +1,16 @@
+"""Load, save and update the top 10 highscores."""
+
 import json
 import re
 
 
 def load_score(path: str) -> list:
+    """Load the highscore list from a JSON file.
+
+    Returns:
+        The list of {"name", "score"} entries, or an empty list if the
+        file is missing, empty or invalid.
+    """
     try:
         with open(path, "r", encoding="utf-8") as file:
             raw = file.read()
@@ -22,6 +30,10 @@ def load_score(path: str) -> list:
 
 
 def save_scores(path: str, scores: list) -> None:
+    """Save the highscore list to a JSON file.
+
+    Errors are printed and do not stop the game.
+    """
     try:
         with open(path, "w", encoding="utf-8") as file:
             json.dump(scores, file)
@@ -30,6 +42,15 @@ def save_scores(path: str, scores: list) -> None:
 
 
 def add_score(scores: list, name: str, score: int) -> list:
+    """Add a score and keep only the 10 best.
+
+    The name is cut to 10 characters and replaced by "Player" if it
+    contains anything other than letters, digits and spaces. A negative
+    score is ignored.
+
+    Returns:
+        The new list, sorted from best to worst, with at most 10 entries.
+    """
     if score < 0:
         print("Warning: score cannot be negative, ignoring.")
         return scores

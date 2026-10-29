@@ -45,7 +45,6 @@ while True:
         while level_running:
             dt = clock.tick(60) / 1000
             for event in pygame.event.get():
-                # keydown = key was pressed
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
                         level.player.move(0, -1, level.maze)
@@ -70,7 +69,6 @@ while True:
                     elif event.key == pygame.K_q:
                         running = False
                         level_running = False
-                #  player closed the window = stop
                 if event.type == pygame.QUIT:
                     running = False
                     level_running = False

@@ -9,7 +9,7 @@ debug:
 
 clean:
 	@find . -type d -name "__pycache__" -not -path "./venv/*" -exec rm -rf {} + 2>/dev/null; \
-	rm -rf .mypy_cache .pytest_cache build dist || True
+	rm -rf .mypy_cache .pytest_cache build dist || true
 
 lint:
 	@flake8 .

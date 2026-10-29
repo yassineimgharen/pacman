@@ -1,9 +1,16 @@
+"""Load and validate the JSON configuration file."""
+
 import json
 import sys
 from typing import Any
 
 
 def _strip_comments(text: str) -> str:
+    """Remove comment lines from the config text.
+
+    Returns:
+        The text without the lines starting with '#'.
+    """
     lines = []
     for line in text.splitlines():
         if line.strip().startswith("#"):
@@ -13,6 +20,16 @@ def _strip_comments(text: str) -> str:
 
 
 def load(path: str) -> dict:
+    """Load the config file and validate every value.
+
+    Missing or invalid values are replaced by defaults with a warning,
+    unknown keys are ignored and the level list is padded to 10 levels.
+    Exits with a clear message if the file is missing, unreadable or
+    is not valid JSON.
+
+    Returns:
+        The validated configuration dictionary.
+    """
     try:
         with open(path, "r", encoding="utf-8") as file:
             content = file.read()
@@ -21,6 +38,11 @@ def load(path: str) -> dict:
         cfg: dict[str, Any] = {}
 
         def _get(key: str, default: Any) -> Any:
+            """Read a key from the config, warning if it is missing.
+
+            Returns:
+                The value from the config, or the default.
+            """
             if key not in data:
                 print(f"Warning: missing '{key}', using default {default}")
             return data.get(key, default)

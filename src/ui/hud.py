@@ -1,3 +1,5 @@
+"""In-game HUD: score, lives, level, time and controls."""
+
 import pygame
 from src.game.level import Level
 
@@ -17,7 +19,11 @@ CONTROLS = [
 
 def draw_hud(screen: pygame.Surface, level: Level,
              current_level: int = 0) -> None:
-    """Draw HUD with score, lives, timer and controls panel."""
+    """Draw the HUD and the controls panel.
+
+    The controls panel is drawn on the right of the maze when there is
+    enough room.
+    """
     font = pygame.font.SysFont(None, 36)
     tiny = pygame.font.SysFont(None, 24)
     w, h = screen.get_size()

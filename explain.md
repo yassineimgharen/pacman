@@ -72,8 +72,7 @@ West (-1,0) → open ✅ → (0,2) → distance = (0-4)²+(2-2)² = 16+0 = 16
 
 Ghost picks South → smallest distance 10 → moves to (1,3).
 
-ghost's new x minus player's x 
-ghost's new y minus player's y
+ghost's new x minus player's x + ghost's new y minus player's y
 
 From (1,3) next frame → keeps calculating → eventually finds path to player through the corridor
 
@@ -96,9 +95,8 @@ Cell value 9 = 1001 in binary means:
 West=1  South=0  East=0  North=1
  ON      OFF      OFF     ON
 
-Copy
-→ West wall ON, North wall ON, East and South walls OFF.
 
+→ West wall ON, North wall ON, East and South walls OFF.
 To check if North wall exists, you check bit 0:
 
 9 & 1 → is bit 0 ON?
@@ -107,9 +105,8 @@ To check if North wall exists, you check bit 0:
 ----
 0001 = 1 → ON → wall exists → can't move North
 
-Copy
-To check if East wall exists, you check bit 1:
 
+To check if East wall exists, you check bit 1:
 9 & 2 → is bit 1 ON?
 1001
 0010
@@ -119,7 +116,45 @@ To check if East wall exists, you check bit 1:
 # understand bitwising
 Worked example: cell = 6 is 0110 in binary.
 
+our next direction is north
+
 6 & 2 = 2, so there's a wall to the east.
 6 & 4 = 4, so there's a wall to the south.
 6 & 1 = 0, so north is open.
 6 & 8 = 0, so west is open.
+
+# PERFECT true & false
+Perfect maze (perfect=True)
+There is exactly one path between any two cells, with no loops. Every corridor ends in a dead end or connects in only one way.
++---+---+---+
+| A         |
++---+---+   +
+|       |   |
++   +---+   +
+|         B |
++---+---+---+
+To go from A to B there's only one route. If a ghost comes toward you in a corridor, you're trapped: the only way out is behind the ghost.
+
+
+Not perfect (perfect=False)
+The generator removes some extra walls, which creates loops. Now there are several ways between two cells.
++---+---+---+
+| A         |
++---+   +   +      ← extra wall removed
+|       |   |
++   +   +   +      ← extra wall removed
+|         B |
++---+---+---+
+From A to B there are now several routes, so when a ghost blocks one, you can go around it another way.
+
+The real Pac-Man maze is full of loops, so you can always run around a block to escape a ghost. A perfect maze would be all dead ends, and the ghosts would catch you every time. That's why the subject says PERFECT must be False.
+
+
+# generator fails
+if recursion happen 1000times mean if a function call it self 1000times -> raiseerror
+
+2. "maximum recursion depth exceeded" comes from Python itself.
+
+Python only allows a function to call itself about 1000 times in a chain. That's the recursion limit; you can see it with sys.getrecursionlimit().
+The generator's _generate_maze calls itself once per cell it goes deeper into. With 60×60 = 3600 cells, it goes past 1000.
+Python then raises a RecursionError, and that error's built-in message is "maximum recursion depth exceeded".
